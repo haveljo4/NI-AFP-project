@@ -1,0 +1,67 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.1.
+--
+-- see: https://github.com/sol/hpack
+
+name:           Chess-tool
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/Chess-tool#readme>
+homepage:       https://github.com/haveljo4/Chess-tool#readme
+bug-reports:    https://github.com/haveljo4/Chess-tool/issues
+author:         Josef Havelka
+maintainer:     haveljo4@fit.cvut.cz
+copyright:      2023 Josef Havelka
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    CHANGELOG.md
+
+source-repository head
+  type: git
+  location: https://github.com/haveljo4/Chess-tool
+
+library
+  exposed-modules:
+      Downloader
+      Lib
+  other-modules:
+      Paths_Chess_tool
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+    , fltkhs
+  default-language: Haskell2010
+
+executable Chess-tool-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_Chess_tool
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -fno-specialise -fmax-simplifier-iterations=0 -fsimplifier-phases=0 -pgml g++ -optl-Wl,--allow-multiple-definition -optl-Wl,--whole-archive -optl-Wl,-Bstatic -optl-Wl,-lfltkc -optl-Wl,-Bdynamic -optl-Wl,--no-whole-archive -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Chess-tool
+    , base >=4.7 && <5
+    , fltkhs
+  default-language: Haskell2010
+
+test-suite Chess-tool-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_Chess_tool
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      HUnit
+    , QuickCheck
+    , base >=4.7 && <5
+    , fltkhs
+    , hspec
+  default-language: Haskell2010

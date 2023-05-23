@@ -1,0 +1,92 @@
+name:                Chess-tool
+version:             0.1.0.0
+github:              "haveljo4/Chess-tool"
+license:             BSD3
+author:              "Josef Havelka"
+maintainer:          "haveljo4@fit.cvut.cz"
+copyright:           "2023 Josef Havelka"
+
+extra-source-files:
+- README.md
+- CHANGELOG.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/Chess-tool#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- fltkhs
+#- gi-gtk >= 4.0.6
+#- aeson >= 2.1.2.1
+#- haskell-gi-base
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs: src
+
+executables:
+  Chess-tool-exe:
+    main:                Main.hs
+    source-dirs:         app
+    # GHC options for Windows
+    ghc-options:
+#      The first three opntions are the Fast compile options -fno-specialise -fmax-simplifier-iterations=0 -fsimplifier-phases=0
+        - -fno-specialise
+        - -fmax-simplifier-iterations=0
+        - -fsimplifier-phases=0
+        - -pgml
+        - g++
+        - -optl-Wl,--allow-multiple-definition
+        - -optl-Wl,--whole-archive
+        - -optl-Wl,-Bstatic
+        - -optl-Wl,-lfltkc
+        - -optl-Wl,-Bdynamic
+        - -optl-Wl,--no-whole-archive
+        - -threaded
+        - -rtsopts
+        - -with-rtsopts=-N
+#   This is the logic for selecting GHC options on a specific operating system
+#  if impl(ghc >= 7.10) && impl(ghc < 8.0) && flag(FastCompile)
+#  ghc-Options: -fno-specialise -fmax-simplifier-iterations=0 -fsimplifier-phases=0
+#  else
+#  ghc-Options: -O2
+#  if os(windows)
+#  ghc-Options: -pgml g++ "-optl-Wl,--allow-multiple-definition" "-optl-Wl,--whole-archive" "-optl-Wl,-Bstatic" "-optl-Wl,-lfltkc" "-optl-Wl,-Bdynamic" "-optl-Wl,--no-whole-archive"
+#  if os(darwin)
+#  ghc-Options: "-optl-Wl,-lfltkc"
+#  if !os(darwin) && !os(windows)
+#  ghc-Options: -pgml g++ "-optl-Wl,--allow-multiple-definition" "-optl-Wl,--whole-archive" "-optl-Wl,-Bstatic" "-optl-Wl,-lfltkc" "-optl-Wl,-Bdynamic" "-optl-Wl,--no-whole-archive"
+
+    dependencies:
+    - Chess-tool
+
+tests:
+  Chess-tool-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+#    - Chess-tool
+    - HUnit
+    - hspec
+    - QuickCheck
+
