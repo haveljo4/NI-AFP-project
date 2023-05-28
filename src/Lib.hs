@@ -16,10 +16,6 @@ import Data.Time.Clock
 import Data.Time.Format
 import System.Locale hiding (defaultTimeLocale)
 
-buttonTwic :: Ref Button -> IO ()
-buttonTwic b = do uiTwicDownload
-
-
 uiStart :: IO ()
 uiStart = do
     window <- windowNew
@@ -30,6 +26,7 @@ uiStart = do
     buttonChessCom <- buttonNew
                 (Rectangle (Position (X 10) (Y 30)) (Size (Width 180) (Height 30)))
                 (Just "Chesscom")
+    setCallback buttonChessCom (\_ -> do uiChessComDownload)
     buttonTwic <- buttonNew
                 (Rectangle (Position (X 190) (Y 30)) (Size (Width 180) (Height 30)))
                 (Just "TWIC")
@@ -46,8 +43,12 @@ uiTwicDownload = do
   window <- windowNew
              (Size (Width 600) (Height 400))
              Nothing
-             (Just "Twic Download Window")
+             (Just "TWIC Download Window")
   begin window
+
+  imageBox  <- boxNew
+                  (toRectangle (10, 10, 600, 50))
+                  (Just "TWIC Downloader")
 
   indexFromInput <- inputNew
                      (toRectangle (100, 150, 280, 25))
@@ -66,19 +67,9 @@ uiTwicDownload = do
                  Nothing
   setBuffer logswindow (Just buff)
 
---  image <- pngImageNew ("./resources/TWICImage.png")
-
-  imageBox  <- boxNew
-                  (toRectangle (10, 10, 600, 50))
-                  (Just "Twic Downloader")
-
---  setImage imageBox (Just image)
-
   buttonDownload <- buttonNew
               (Rectangle (Position (X 10) (Y 360)) (Size (Width 280) (Height 30)))
               (Just "Download")
-
---  setCallback button (\_ ->  do appendToBuffer buff  "\nHello, FLTKHS!")
   setCallback buttonDownload (\_ ->  do
      indexFrom <- ioTextToInt =<< getValue indexFromInput
      indexTo <- ioTextToInt =<< getValue indexToInput
@@ -90,6 +81,64 @@ uiTwicDownload = do
   end window
   showWidget window
 
+uiChessComDownload :: IO ()
+uiChessComDownload = do
+  window <- windowNew
+             (Size (Width 600) (Height 400))
+             Nothing
+             (Just "ChessCom Download Window")
+  begin window
+
+  imageBox  <- boxNew
+                  (toRectangle (10, 10, 600, 50))
+                  (Just "ChessCom Downloader")
+  yearFromInput <- inputNew
+                     (toRectangle (100, 150, 120, 25))
+                     (Just "year from #:")
+                     (Just FlIntInput)
+  setMaximumSize yearFromInput 4
+  yearToInput <- inputNew
+                     (toRectangle (260, 150, 120, 25))
+                     (Just "year to #:")
+                     (Just FlIntInput)
+  setMaximumSize yearToInput 4
+
+  monthFromInput <- inputNew
+                   (toRectangle (100, 190, 280, 25))
+                   (Just "Index to #:")
+                   (Just FlIntInput)
+  setMaximumSize monthFromInput 2
+  monthToInput <- inputNew
+                     (toRectangle (100, 190, 280, 25))
+                     (Just "Index to #:")
+                     (Just FlIntInput)
+  setMaximumSize monthToInput 2
+
+  buff <- textBufferNew Nothing Nothing
+  logswindow <- textDisplayNew
+                 (toRectangle (10, 250, 500, 100))
+                 Nothing
+  setBuffer logswindow (Just buff)
+
+
+  buttonDownload <- buttonNew
+              (Rectangle (Position (X 10) (Y 360)) (Size (Width 280) (Height 30)))
+              (Just "Download")
+
+--  setCallback button (\_ ->  do appendToBuffer buff  "\nHello, FLTKHS!")
+--  setCallback buttonDownload (\_ ->  do
+--     indexFrom <- ioTextToInt =<< getValue indexFromInput
+--     indexTo <- ioTextToInt =<< getValue indexToInput
+----     inputValue' <- getValue intInput' >>= return . read . T.unpack
+----    TODO field for specifying path?
+--     handleDownload indexFrom indexTo buff
+----     appendToBuffer buff  ("\nDownloading!!" <>  indexFrom <>  indexTo)
+--     )
+  end window
+  showWidget window
+
+
+
 handleDownload :: Integer -> Integer -> Ref TextBuffer -> IO ()
 handleDownload iFrom iTo buff = do
    if iFrom > iTo
@@ -100,8 +149,6 @@ handleDownload iFrom iTo buff = do
         _ <- forkIO $ TWICDownloadManager.downloadAndGroup iFrom iTo "./" (logFunction buff)
         --     TODO this is not nice
         putStr ""
-
-
 
 logFunction :: Ref TextBuffer -> String -> String -> IO ()
 logFunction buff msg lvl = do
