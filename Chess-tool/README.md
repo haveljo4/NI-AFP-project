@@ -22,7 +22,6 @@ The tool is designed to be user-friendly and accessible to individuals without a
 - Progress indicators during the download process.
 - Error handling for invalid inputs and network connectivity issues.
 
-
 **Requirements for build**
 
 
@@ -38,3 +37,20 @@ Then install autoconf with version 2.69
     ./configure
     make
     make install
+
+
+Then when you want to add some extra-deps, it is important to run: stack install --flag fltkhs:bundled
+But it takes quite a lot of time
+
+
+**Relevant sources**
+The chess.com api documentation is here.
+https://www.chess.com/news/view/published-data-api#pubapi-endpoint-player
+
+The pdf file with the api can be found in the "doc" folder. 
+
+Twic
+curl is like this:
+curl "https://theweekinchess.com/zips/twic${i}g.zip"
+
+where ${i} is number of the zip file

@@ -2,6 +2,7 @@ flags: {}
 resolver: lts-15.0
 extra-deps:
   - fltkhs-0.8.0.3
+  - zip-conduit-0.3.0
 
 nix:
   packages:

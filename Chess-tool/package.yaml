@@ -22,6 +22,20 @@ description:         Please see the README on GitHub at <https://github.com/gith
 dependencies:
 - base >= 4.7 && < 5
 - fltkhs
+- wreq
+- conduit
+- conduit-extra
+- bytestring
+- http-types
+- lens
+- filepath
+- directory
+- zip-conduit
+- split
+- time
+- aeson
+- unordered-containers
+- text
 #- gi-gtk >= 4.0.6
 #- aeson >= 2.1.2.1
 #- haskell-gi-base
