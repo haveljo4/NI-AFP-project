@@ -18,8 +18,8 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-haskell@v1
       with:
-        ghc-version: '8.10.3'
-        cabal-version: '3.2'
+        ghc-version: '8.8.2'
+        cabal-version: '1.12'
 
 #    - name: Cache
 #      uses: actions/cache@v3
@@ -38,7 +38,7 @@ jobs:
 #        cabal update
 #        cabal build --only-dependencies --enable-tests --enable-benchmarks
     - name: Build
-      run: stack install --flag fltkhs:bundled
+      run: stack update; stack install --flag fltkhs:bundled; stack build;
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
