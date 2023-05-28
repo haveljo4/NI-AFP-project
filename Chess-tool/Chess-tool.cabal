@@ -6,6 +6,7 @@ cabal-version: 1.12
 
 name:           Chess-tool
 version:        0.1.0.0
+
 description:    Please see the README on GitHub at <https://github.com/githubuser/Chess-tool#readme>
 homepage:       https://github.com/haveljo4/Chess-tool#readme
 bug-reports:    https://github.com/haveljo4/Chess-tool/issues
