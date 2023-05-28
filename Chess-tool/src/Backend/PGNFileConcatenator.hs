@@ -1,4 +1,4 @@
-module PGNFileConcatenator (processFolderWithPGNs) where
+module Backend.PGNFileConcatenator (processFolderWithPGNs) where
   import System.Directory (listDirectory)
   import System.FilePath (takeExtension, (</>))
   import Data.List (isSuffixOf)

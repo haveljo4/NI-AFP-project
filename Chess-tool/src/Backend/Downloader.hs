@@ -1,4 +1,4 @@
-module Downloader (download) where
+module Backend.Downloader (download) where
 import Network.Wreq
 import Control.Lens
 import Data.Foldable

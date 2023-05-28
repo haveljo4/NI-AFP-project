@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module ChessComJsonHelper where
+module Backend.ChessComJsonHelper where
 import Control.Lens (folded, (^..))
 import GHC.Generics (Generic)
 import Data.Aeson

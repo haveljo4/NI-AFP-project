@@ -1,4 +1,4 @@
-module ChessComDownloadManager where
+module Backend.ChessComDownloadManager where
 import System.Directory (createDirectoryIfMissing, removeDirectoryRecursive)
 import System.FilePath ((</>))
 import Control.Monad (forM_)
@@ -6,8 +6,9 @@ import Codec.Archive.Zip
 import Conduit
 import qualified Data.Conduit.Combinators as CC
 import qualified Data.ByteString as BS
-import Downloader
-import PGNFileConcatenator
+import qualified Backend.Downloader as Downloader 
+import qualified Backend.PGNFileConcatenator as PGNFileConcatenator 
+import Backend.ChessComJsonHelper as ChessComJsonHelper
 import Network.Wreq
 import Control.Lens
 import Data.Foldable
@@ -15,7 +16,6 @@ import qualified Data.ByteString.Lazy as B
 import Data.ByteString.Lazy.Char8 (pack, unpack)
 import Control.Monad.IO.Class (liftIO)
 import System.FilePath
-import ChessComJsonHelper
 import Data.List (intercalate)
 
 downloadAndGroup :: Integer -> Integer -> Integer -> Integer -> String -> FilePath -> IO ()
@@ -34,7 +34,7 @@ downloadAndGroup yearFrom monthFrom yearTo monthTo userName outputFolder = do
     processUrl tmpFolderPath userName url = do
       let (year, month) = ChessComJsonHelper.extractYearAndMonthFromURL url
           filePath = tmpFolderPath </> (userName ++ "-" ++ show year ++ "-" ++ show month ++ ".pgn")
-      download (url ++ "/pgn") filePath
+      Downloader.download (url ++ "/pgn") filePath
 
     createTmpFolders outputFolder tmpFolderPath = do
       createDirectoryIfMissing True outputFolder

@@ -36,6 +36,8 @@ dependencies:
 - aeson
 - unordered-containers
 - text
+- stm
+- old-locale
 #- gi-gtk >= 4.0.6
 #- aeson >= 2.1.2.1
 #- haskell-gi-base

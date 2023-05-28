@@ -4,8 +4,8 @@ import qualified Lib
 import qualified CommandLineView
 
 main :: IO ()
---main = Lib.main
-main = CommandLineView.main
+main = Lib.main
+--main = CommandLineView.main
 
 replMain :: IO ()
 replMain = Lib.replMain
