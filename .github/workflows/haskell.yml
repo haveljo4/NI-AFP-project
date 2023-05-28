@@ -33,12 +33,14 @@ jobs:
 #          ${{ runner.os }}-build-
 #          ${{ runner.os }}-
 
-#    - name: Install dependencies
-#      run: |
-#        cabal update
-#        cabal build --only-dependencies --enable-tests --enable-benchmarks
+    - name: Install dependencies
+      run: | 
+        stack update
+        stack exec -- mintty -e ./.github/InstallDeps.sh
     - name: Build
-      run: stack update; stack install --flag fltkhs:bundled; stack build;
+      run: |
+        stack install --flag fltkhs:bundled
+        stack build
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
