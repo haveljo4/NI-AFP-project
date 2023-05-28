@@ -38,6 +38,11 @@ jobs:
         stack update
         echo "running: stack exec -- mintty -e ./.github/InstallDeps.sh"  
         stack exec -- mintty -e ./.github/InstallDeps.sh
+    - name: Upload Mintty Output log
+      uses: actions/upload-artifact@v2
+      with:
+        name: mintty-output
+        path: mintty_output.txt
     - name: Build
       run: |
         stack install --flag fltkhs:bundled
@@ -60,11 +65,6 @@ jobs:
       run : |
         echo "running: stack exec -- mintty -e ./.github/ZipBinaries.sh"  
         stack exec -- mintty -e ./.github/ZipBinaries.sh
-    - name: Upload Mintty Output
-      uses: actions/upload-artifact@v2
-      with:
-        name: mintty-output
-        path: mintty_output.txt
     - name: Upload Dlls zip
       uses: actions/upload-artifact@v2
       with:
