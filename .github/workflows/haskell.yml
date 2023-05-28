@@ -36,6 +36,7 @@ jobs:
     - name: Install dependencies
       run: | 
         stack update
+        echo "running: stack exec -- mintty -e ./.github/InstallDeps.sh"  
         stack exec -- mintty -e ./.github/InstallDeps.sh
     - name: Build
       run: |
@@ -55,3 +56,8 @@ jobs:
           - Second Change
         draft: false
         prerelease: false
+    - name: Upload Mintty Output
+      uses: actions/upload-artifact@v2
+      with:
+        name: mintty-output
+        path: mintty_output.txt
