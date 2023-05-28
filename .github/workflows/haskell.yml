@@ -56,8 +56,17 @@ jobs:
           - Second Change
         draft: false
         prerelease: false
+    - name: Copy dll libraries and exe
+      run : |
+        echo "running: stack exec -- mintty -e ./.github/ZipBinaries.sh"  
+        stack exec -- mintty -e ./.github/ZipBinaries.sh
     - name: Upload Mintty Output
       uses: actions/upload-artifact@v2
       with:
         name: mintty-output
         path: mintty_output.txt
+    - name: Upload Dlls zip
+      uses: actions/upload-artifact@v2
+      with:
+        name: tmp
+        path: tmp.zip
