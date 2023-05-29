@@ -45,10 +45,13 @@ jobs:
       with:
         name: mintty-output
         path: mintty_output.txt
-    - name: Build
+    - name: Install
       shell: pwsh
       run: |
         stack install --flag fltkhs:bundled
+    - name: Build
+      shell: pwsh
+      run: |
         stack build
     - name: Create Release
       id: create_release
