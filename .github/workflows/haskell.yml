@@ -21,24 +21,21 @@ jobs:
         ghc-version: '8.8.2'
         cabal-version: '3.2'
 
-#    - name: Cache
-#      uses: actions/cache@v3
-#      env:
-#        cache-name: cache-stack
-#      with:
-#        path: ~/.stack
-#        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.cabal') }}-${{ hashFiles('**/cabal.project') }}
-#        restore-keys: |
-#          ${{ runner.os }}-build-${{ env.cache-name }}-
-#          ${{ runner.os }}-build-
-#          ${{ runner.os }}-
+    - name: Cache stack
+        - uses: actions/checkout@v2
+        - id: stack-cache
+          uses: ./
+          with:
+            working-directory: ./
 
     - name: Install dependencies
       run: | 
         stack update
         echo "running: stack exec -- mintty -e ./.github/InstallDeps.sh"  
         $processName = "mintty"
-        $process = Start-Process -FilePath "stack" -ArgumentList "exec -- mintty -e ./.github/InstallDeps.sh" -PassThru; Start-Sleep -Seconds 120
+#        $process = Start-Process -FilePath "stack" -ArgumentList "exec -- mintty -e ./.github/InstallDeps.sh" -PassThru; Start-Sleep -Seconds 120
+        stack exec -- mintty -e ./.github/InstallDeps.sh
+        Start-Sleep -Seconds 120
     - name: Upload Mintty Output log
       uses: actions/upload-artifact@v2
       with:
