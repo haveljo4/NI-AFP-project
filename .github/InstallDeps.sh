@@ -1,4 +1,6 @@
+echo "before -Syy" >> mintty_output.txt
 yes | pacman -Syy >> mintty_output.txt
+echo "after -Syy" >> mintty_output.txt
 yes | pacman -Syu >> mintty_output.txt
 yes | pacman -S wget >> mintty_output.txt
 yes | pacman -S tar >> mintty_output.txt
