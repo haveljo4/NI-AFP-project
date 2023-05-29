@@ -20,10 +20,10 @@ jobs:
           cabal-version: '3.2'
       - name: Install autoconf, headers and make
         run: |
-          apt install make
-          apt install autoconf
-          apt install autoheader
-          apt install libxft-dev
+          sudo apt install make
+          sudo apt install autoconf
+          sudo apt install autoheader
+          sudo apt install libxft-dev
       - name: Update stack
         run: |
           stack update
