@@ -39,7 +39,7 @@ jobs:
       shell: pwsh
       run: | 
         stack exec -- mintty -e ./.github/InstallDeps.sh
-        Start-Sleep -Seconds 120
+        Start-Sleep -Seconds 360
     - name: Upload Mintty Output log
       uses: actions/upload-artifact@v2
       with:
