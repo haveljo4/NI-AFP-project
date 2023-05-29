@@ -22,7 +22,6 @@ jobs:
         run: |
           sudo apt install make
           sudo apt install autoconf
-          sudo apt install autoheader
           sudo apt install libxft-dev
       - name: Update stack
         run: |
