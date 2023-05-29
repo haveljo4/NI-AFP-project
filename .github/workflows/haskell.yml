@@ -21,10 +21,12 @@ jobs:
       - name: Install dependencies
         shell: pwsh
         run: |
-          stack exec -- mintty -e ./.github/InstallDepsUpdatePac.sh
-          Start-Sleep -Seconds 15
+          stack exec -- mintty -e ./.github/InstallDepsSyy.sh
+          Start-Sleep -Seconds 10
+          stack exec -- mintty -e ./.github/InstallDepsSyu.sh
+          Start-Sleep -Seconds 10
           stack exec -- mintty -e ./.github/InstallDepsInstallStuff.sh
-          Start-Sleep -Seconds 15
+          Start-Sleep -Seconds 10
       - name: Upload Mintty Output log
         uses: actions/upload-artifact@v2
         with:
