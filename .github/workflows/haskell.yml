@@ -22,11 +22,11 @@ jobs:
         shell: pwsh
         run: |
           stack exec -- mintty -e ./.github/InstallDepsSyy.sh
-          Start-Sleep -Seconds 10
+          Start-Sleep -Seconds 60
           stack exec -- mintty -e ./.github/InstallDepsSyu.sh
-          Start-Sleep -Seconds 10
+          Start-Sleep -Seconds 60
           stack exec -- mintty -e ./.github/InstallDepsInstallStuff.sh
-          Start-Sleep -Seconds 10
+          Start-Sleep -Seconds 40
       - name: Upload Mintty Output log
         uses: actions/upload-artifact@v2
         with:
