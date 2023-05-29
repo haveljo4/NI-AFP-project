@@ -10,26 +10,22 @@ permissions:
   contents: read
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  build windows:
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-haskell@v1
         with:
           ghc-version: '8.8.2'
           cabal-version: '3.2'
-      - name: Install autoconf, headers and make
+      - name: Install dependencies
+        shell: pwsh
         run: |
-          sudo apt install make
-          sudo apt install autoconf
-          sudo apt install libxft-dev
-      - name: Update stack
-        run: |
-          stack update
-      - name: Stack install
-        run: |
-          stack install --flag fltkhs:bundled
-      - name: Stack build
-        run: |
-          stack build
+          stack exec -- mintty -e ./.github/InstallDeps.sh
+          Start-Sleep -Seconds 5
+      - name: Upload Mintty Output log
+        uses: actions/upload-artifact@v2
+        with:
+          name: mintty-output
+          path: mintty_output.txt
 
