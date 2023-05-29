@@ -28,6 +28,7 @@ library
       Backend.ChessComDownloadManager
       Backend.ChessComJsonHelper
       Backend.Downloader
+      Backend.HTTPHelper
       Backend.PGNFileConcatenator
       Backend.TWICDownloadManager
       CommandLineView
@@ -47,6 +48,7 @@ library
     , directory
     , filepath
     , fltkhs
+    , http-client
     , http-types
     , lens
     , old-locale
@@ -76,6 +78,7 @@ executable Chess-tool-exe
     , directory
     , filepath
     , fltkhs
+    , http-client
     , http-types
     , lens
     , old-locale
@@ -108,6 +111,7 @@ test-suite Chess-tool-test
     , filepath
     , fltkhs
     , hspec
+    , http-client
     , http-types
     , lens
     , old-locale

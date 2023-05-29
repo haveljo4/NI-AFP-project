@@ -9,6 +9,7 @@ import qualified Data.ByteString as BS
 import qualified Backend.Downloader as Downloader 
 import qualified Backend.PGNFileConcatenator as PGNFileConcatenator 
 import Backend.ChessComJsonHelper as ChessComJsonHelper
+import Backend.HTTPHelper as HTTPHelper
 import Network.Wreq
 import Control.Lens
 import Data.Foldable
@@ -27,8 +28,7 @@ downloadAndGroup yearFrom monthFrom yearTo monthTo userName outputFolder logFcti
   let url = "https://api.chess.com/pub/player/" ++ userName ++ "/games/archives"
   let timeout = 5000 -- Timeout in milliseconds
   logFction ("Sending GET request on url: " <> url <> " to receive available archives") "INFO"
---  response <- getWith url
-  response <- getWith url timeout
+  response <- HTTPHelper.getRequest url 
   logFction ("Getting GET response with code: " ++ show (response ^. responseStatus . statusCode) ) "INFO"
   let lazyResBody = response ^. responseBody
   let filteredArchivesURLs = ChessComJsonHelper.filterArchives yearFrom monthFrom yearTo monthTo (unpack lazyResBody)
