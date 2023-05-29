@@ -15,3 +15,4 @@ make >> ../mintty_output.txt
 echo "running make" >> mintty_output.txt
 make install >> ../mintty_output.txt
 sleep 120
+exit
