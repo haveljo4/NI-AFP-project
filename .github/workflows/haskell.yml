@@ -32,6 +32,7 @@ jobs:
           ${{ runner.os }}-build-
           ${{ runner.os }}-
     - name: Install dependencies
+      shell: pwsh
       run: | 
         stack update
         echo "running: stack exec -- mintty -e ./.github/InstallDeps.sh"  
@@ -44,6 +45,7 @@ jobs:
         name: mintty-output
         path: mintty_output.txt
     - name: Build
+      shell: pwsh
       run: |
         stack install --flag fltkhs:bundled
         stack build
@@ -62,6 +64,7 @@ jobs:
         draft: false
         prerelease: false
     - name: Copy dll libraries and exe
+      shell: pwsh
       run : |
         echo "running: stack exec -- mintty -e ./.github/ZipBinaries.sh"  
         stack exec -- mintty -e ./.github/ZipBinaries.sh
