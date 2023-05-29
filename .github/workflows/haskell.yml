@@ -37,7 +37,10 @@ jobs:
       run: | 
         stack update
         echo "running: stack exec -- mintty -e ./.github/InstallDeps.sh"  
-        stack exec -- mintty -e ./.github/InstallDeps.sh
+        $processName = "mintty"
+        $process = Start-Process -FilePath "stack" -ArgumentList "exec -- mintty -e ./.github/InstallDeps.sh" -PassThru 
+        Start-Sleep -Seconds 2
+        Wait-Process -Name $processName
     - name: Upload Mintty Output log
       uses: actions/upload-artifact@v2
       with:
