@@ -10,10 +10,26 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  build linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-haskell@v1
+        with:
+          ghc-version: '8.8.2'
+          cabal-version: '3.2'
+      - name: Update stack
+        run: |
+          stack update
+      - name: Stack install
+        run: |
+          stack install --flag fltkhs:bundled
+      - name: Stack build
+        run: |
+          stack build
 
+  build windows:
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-haskell@v1
