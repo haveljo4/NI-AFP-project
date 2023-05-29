@@ -29,4 +29,37 @@ jobs:
         with:
           name: mintty-output
           path: mintty_output.txt
-
+      - name: Install
+        shell: pwsh
+        run: |
+          stack install --flag fltkhs:bundled
+      - name: Build
+        shell: pwsh
+        run: |
+          stack build
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
+      - name: Copy dll libraries and exe
+        shell: pwsh
+        run : |
+          echo "running: stack exec -- mintty -e ./.github/ZipBinaries.sh"  
+          Start-Sleep -Seconds 5;
+          stack exec -- mintty -e ./.github/ZipBinaries.sh
+          Start-Sleep -Seconds 5;  Wait-Process -Name "mintty"
+      - name: Upload Dlls zip
+        uses: actions/upload-artifact@v2
+        with:
+          name: tmp
+          path: tmp.zip
