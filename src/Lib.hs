@@ -15,6 +15,11 @@ import Control.Exception (evaluate)
 import Data.Time.Clock
 import Data.Time.Format
 import System.Locale hiding (defaultTimeLocale)
+import Control.Concurrent
+import Control.Concurrent.STM
+import Control.Exception (evaluate)
+import Control.Monad
+import Data.IORef
 
 uiStart :: IO ()
 uiStart = do
@@ -63,21 +68,24 @@ uiTwicDownload = do
 
   buff <- textBufferNew Nothing Nothing
   logswindow <- textDisplayNew
-                 (toRectangle (10, 250, 500, 100))
+                 (toRectangle (10, 250, 580, 100))
                  Nothing
   setBuffer logswindow (Just buff)
 
   buttonDownload <- buttonNew
               (Rectangle (Position (X 10) (Y 360)) (Size (Width 280) (Height 30)))
               (Just "Download")
+  c <- newTChanIO
   setCallback buttonDownload (\_ ->  do
      indexFrom <- ioTextToInt =<< getValue indexFromInput
      indexTo <- ioTextToInt =<< getValue indexToInput
 --     inputValue' <- getValue intInput' >>= return . read . T.unpack
 --    TODO field for specifying path?
-     handleTWICDownload indexFrom indexTo buff
+     void $ forkIO $ (handleTWICDownload indexFrom indexTo c)
 --     appendToBuffer buff  ("\nDownloading!!" <>  indexFrom <>  indexTo)
      )
+  FL.addTimeout 0.025 (tick buff c)
+
   end window
   showWidget window
 
@@ -92,6 +100,12 @@ uiChessComDownload = do
   imageBox  <- boxNew
                   (toRectangle (10, 10, 600, 50))
                   (Just "ChessCom Downloader")
+  userNameInput <- inputNew
+                     (toRectangle (100, 110, 120, 25))
+                     (Just "User name #:")
+                     (Just FlNormalInput)
+  setMaximumSize userNameInput 255
+
   yearFromInput <- inputNew
                      (toRectangle (100, 150, 120, 25))
                      (Just "Year from #:")
@@ -116,7 +130,7 @@ uiChessComDownload = do
 
   buff <- textBufferNew Nothing Nothing
   logswindow <- textDisplayNew
-                 (toRectangle (10, 250, 500, 100))
+                 (toRectangle (10, 250, 580, 100))
                  Nothing
   setBuffer logswindow (Just buff)
 
@@ -124,48 +138,91 @@ uiChessComDownload = do
   buttonDownload <- buttonNew
               (Rectangle (Position (X 10) (Y 360)) (Size (Width 280) (Height 30)))
               (Just "Download")
-
---  setCallback button (\_ ->  do appendToBuffer buff  "\nHello, FLTKHS!")
---  setCallback buttonDownload (\_ ->  do
---     indexFrom <- ioTextToInt =<< getValue indexFromInput
---     indexTo <- ioTextToInt =<< getValue indexToInput
-----     inputValue' <- getValue intInput' >>= return . read . T.unpack
-----    TODO field for specifying path?
---     handleTWICDownload indexFrom indexTo buff
-----     appendToBuffer buff  ("\nDownloading!!" <>  indexFrom <>  indexTo)
---     )
+  c <- newTChanIO
+  setCallback buttonDownload (\_ ->  do
+     yearFrom <- ioTextToInt =<< getValue yearFromInput
+     monthFrom <- ioTextToInt =<< getValue monthFromInput
+     yearTo <- ioTextToInt =<< getValue yearToInput
+     monthTo <- ioTextToInt =<< getValue monthToInput
+     username <- ioTextToString  =<< getValue userNameInput
+     void $ forkIO $ (handleChessComDownload yearFrom monthFrom yearTo monthTo username c)
+     )
+  FL.addTimeout 0.025 (tick buff c)
   end window
   showWidget window
 
 
 
 
-handleChessComDownload :: Integer -> Integer -> Integer -> Integer -> T.Text ->  Ref TextBuffer -> IO ()
-handleChessComDownload  yearFrom monthFrom yearTo monthTo username buff = do
-  
+handleChessComDownload :: Integer -> Integer -> Integer -> Integer -> String -> TChan T.Text -> IO ()
+handleChessComDownload yearFrom monthFrom yearTo monthTo username channel = do
+  case validateDates yearFrom monthFrom yearTo monthTo of
+    Left msg -> logFunction channel msg "ERROR"
+    Right _ -> do
+      ChessComDownloadManager.downloadAndGroup yearFrom monthFrom yearTo monthTo username "./chess-com-output"  (logFunction channel)
+      pure ()
 
-handleTWICDownload :: Integer -> Integer -> Ref TextBuffer -> IO ()
-handleTWICDownload iFrom iTo buff = do
+validateDates :: Integer -> Integer -> Integer -> Integer -> Either String ()
+validateDates yearFrom monthFrom yearTo monthTo
+  | yearFrom > yearTo = Left "Invalid date range: From year is after To year"
+  | yearFrom == yearTo && monthFrom > monthTo = Left "Invalid date range: From month is after To month"
+  | not (isValidMonth monthFrom) = Left "Invalid month: From month is not in the range 1-12"
+  | not (isValidMonth monthTo) = Left "Invalid month: To month is not in the range 1-12"
+  | otherwise = Right ()
+  where
+    isValidMonth :: Integer -> Bool
+    isValidMonth month = month >= 1 && month <= 12
+
+
+handleTWICDownload :: Integer -> Integer ->  TChan T.Text -> IO ()
+handleTWICDownload iFrom iTo  channel = do
    if iFrom > iTo
       then  do
-        logFunction buff "\"Index from\" is greater then \"index to\"!" "ERROR"
-        logFunction buff "Downloading didn't start" "ERROR"
+        logFunction channel "\"Index from\" is greater then \"index to\"!" "ERROR"
+        logFunction channel "Downloading didn't start" "ERROR"
       else do
-        _ <- forkIO $ TWICDownloadManager.downloadAndGroup iFrom iTo "./" (logFunction buff)
-        --     TODO this is not nice
-        putStr ""
+        TWICDownloadManager.downloadAndGroup iFrom iTo "./TWIC-output" (logFunction channel)
 
-logFunction :: Ref TextBuffer -> String -> String -> IO ()
-logFunction buff msg lvl = do
-  currentTime <- getCurrentTime
-  let formattedTime = formatTime defaultTimeLocale "%Y-%m-%d %H:%M:%S" currentTime
-  let logMsg = formattedTime <> " [" <> lvl <> "]: " <> msg <> "\n"
-  appendToBuffer buff (T.pack logMsg)
+-- Check for a message from our worker thread.  If there is a message,
+-- gobble all the messages up and set the label to the contents on the
+-- most recent message.
+tick :: Ref TextBuffer -> TChan T.Text -> IO ()
+tick b c = do
+  mx <- atomically $ tryReadTChan c
+  case mx of
+    Nothing -> return ()
+    Just x -> void $ appendToBuffer b x
+  _ <- FL.repeatTimeout 0.025 (tick b c)
+  return ()
+
+sendNewLine :: TChan T.Text -> IO ()
+sendNewLine chan = do
+  let newLine = T.singleton '\n'
+  atomically $ writeTChan chan newLine
+
+
+
+logFunction :: TChan T.Text -> String -> String -> IO ()
+logFunction channel msg lvl = do
+  msg <- formatMessage msg lvl
+  atomically $ writeTChan channel (T.pack msg)
+  sendNewLine channel
+  where 
+    formatMessage :: String -> String -> IO String
+    formatMessage msg lvl = do
+      currentTime <- getCurrentTime
+      let formattedTime = formatTime defaultTimeLocale "%H:%M:%S" currentTime
+      return $ formattedTime <> " [" <> lvl <> "]: " <> msg
 
 ioTextToInt :: T.Text -> IO Integer
 ioTextToInt ioText = do
   let text = T.unpack ioText
   return (read text)
+
+ioTextToString :: T.Text -> IO String
+ioTextToString ioText = do
+  let text = T.unpack ioText
+  return text
 
 main :: IO ()
 main = uiStart >> FL.run >> FL.flush
