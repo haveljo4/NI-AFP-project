@@ -1,3 +1,6 @@
+echo "Starting Mintty script and sleep for 5 secs" >> mintty_output.txt
+sleep 5
+echo "String after sleep " >> mintty_output.txt
 echo "Y" | pacman -Syy >> mintty_output.txt
 echo "Y" | pacman -Syu >> mintty_output.txt
 echo "Y" | pacman -S wget >> mintty_output.txt
