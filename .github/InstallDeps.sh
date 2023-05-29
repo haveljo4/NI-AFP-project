@@ -14,7 +14,4 @@ cd autoconf-2.69 >> mintty_output.txt
 ./configure >> mintty_output.txt
 make >> mintty_output.txt
 make install >> mintty_output.txt
-
-#echo "Y" | pacman -S autoconf >> mintty_output.txt
-#echo "Y" | pacman -S make >> mintty_output.txt
-#echo "Y" | pacman -S automake >> mintty_output.txt
+sleep 120
