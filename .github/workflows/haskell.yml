@@ -26,7 +26,6 @@ jobs:
         stack update
         echo "running: stack exec -- mintty -e ./.github/InstallDeps.sh"  
         $processName = "mintty"
-#        $process = Start-Process -FilePath "stack" -ArgumentList "exec -- mintty -e ./.github/InstallDeps.sh" -PassThru; Start-Sleep -Seconds 120
         stack exec -- mintty -e ./.github/InstallDeps.sh
         Start-Sleep -Seconds 120
     - name: Upload Mintty Output log
