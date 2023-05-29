@@ -18,6 +18,12 @@ jobs:
         with:
           ghc-version: '8.8.2'
           cabal-version: '3.2'
+      - name: Install autoconf, headers and make
+        run: |
+          apt install make
+          apt install autoconf
+          apt install autoheader
+          apt install libxft-dev
       - name: Update stack
         run: |
           stack update
