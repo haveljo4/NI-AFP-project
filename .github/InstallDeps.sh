@@ -1,5 +1,5 @@
+echo "Y" | pacman -Syy >> mintty_output.txt
 echo "Y" | pacman -Syu >> mintty_output.txt
-sleep 1
 echo "Y" | pacman -S wget >> mintty_output.txt
 echo "Y" | pacman -S tar >> mintty_output.txt
 echo "Y" | pacman -S unzip >> mintty_output.txt
