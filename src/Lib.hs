@@ -75,7 +75,7 @@ uiTwicDownload = do
      indexTo <- ioTextToInt =<< getValue indexToInput
 --     inputValue' <- getValue intInput' >>= return . read . T.unpack
 --    TODO field for specifying path?
-     handleDownload indexFrom indexTo buff
+     handleTWICDownload indexFrom indexTo buff
 --     appendToBuffer buff  ("\nDownloading!!" <>  indexFrom <>  indexTo)
      )
   end window
@@ -94,23 +94,23 @@ uiChessComDownload = do
                   (Just "ChessCom Downloader")
   yearFromInput <- inputNew
                      (toRectangle (100, 150, 120, 25))
-                     (Just "year from #:")
+                     (Just "Year from #:")
                      (Just FlIntInput)
   setMaximumSize yearFromInput 4
   yearToInput <- inputNew
-                     (toRectangle (260, 150, 120, 25))
-                     (Just "year to #:")
+                     (toRectangle (330, 150, 120, 25))
+                     (Just "Year to #:")
                      (Just FlIntInput)
   setMaximumSize yearToInput 4
 
   monthFromInput <- inputNew
-                   (toRectangle (100, 190, 280, 25))
-                   (Just "Index to #:")
+                   (toRectangle (100, 190, 120, 25))
+                   (Just "Month from #:")
                    (Just FlIntInput)
   setMaximumSize monthFromInput 2
   monthToInput <- inputNew
-                     (toRectangle (100, 190, 280, 25))
-                     (Just "Index to #:")
+                     (toRectangle (330, 190, 120, 25))
+                     (Just "Month to #:")
                      (Just FlIntInput)
   setMaximumSize monthToInput 2
 
@@ -131,7 +131,7 @@ uiChessComDownload = do
 --     indexTo <- ioTextToInt =<< getValue indexToInput
 ----     inputValue' <- getValue intInput' >>= return . read . T.unpack
 ----    TODO field for specifying path?
---     handleDownload indexFrom indexTo buff
+--     handleTWICDownload indexFrom indexTo buff
 ----     appendToBuffer buff  ("\nDownloading!!" <>  indexFrom <>  indexTo)
 --     )
   end window
@@ -139,8 +139,13 @@ uiChessComDownload = do
 
 
 
-handleDownload :: Integer -> Integer -> Ref TextBuffer -> IO ()
-handleDownload iFrom iTo buff = do
+
+handleChessComDownload :: Integer -> Integer -> Integer -> Integer -> T.Text ->  Ref TextBuffer -> IO ()
+handleChessComDownload  yearFrom monthFrom yearTo monthTo username buff = do
+  
+
+handleTWICDownload :: Integer -> Integer -> Ref TextBuffer -> IO ()
+handleTWICDownload iFrom iTo buff = do
    if iFrom > iTo
       then  do
         logFunction buff "\"Index from\" is greater then \"index to\"!" "ERROR"
