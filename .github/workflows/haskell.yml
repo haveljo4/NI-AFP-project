@@ -31,12 +31,13 @@ jobs:
           ${{ runner.os }}-build-${{ env.cache-name }}-
           ${{ runner.os }}-build-
           ${{ runner.os }}-
+    - name: Update stack
+      shell: pwsh
+      run: |
+        stack update
     - name: Install dependencies
       shell: pwsh
       run: | 
-        stack update
-        echo "running: stack exec -- mintty -e ./.github/InstallDeps.sh"  
-        $processName = "mintty"
         stack exec -- mintty -e ./.github/InstallDeps.sh
         Start-Sleep -Seconds 120
     - name: Upload Mintty Output log
