@@ -14,5 +14,5 @@ yes | ./configure >> ../mintty_output.txt
 yes | make >> ../mintty_output.txt
 echo "running make" >> mintty_output.txt
 yes | make install >> ../mintty_output.txt
-sleep 120
+sleep 10
 exit
