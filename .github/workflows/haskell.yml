@@ -16,7 +16,7 @@ jobs:
       - name: Zip dll libraries and exe
         shell: pwsh
         run: |
-          New-Item -ItemType File -Path "tmp.zip"
+          New-Item -ItemType File -Path "./tmp.zip"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
