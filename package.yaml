@@ -59,6 +59,7 @@ library:
 executables:
   Chess-tool-exe:
     main:                Main.hs
+    maintainer:          Josef Havelka pepahavelk@seznam.cz
     source-dirs:         app
     # GHC options for Windows
     ghc-options:
