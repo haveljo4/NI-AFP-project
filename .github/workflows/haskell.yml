@@ -22,7 +22,8 @@ jobs:
         run: |
           Start-Sleep -Seconds 10
           stack exec -- mintty -e ./.github/InstallDepsInstallStuff.sh
-          Start-Sleep -Seconds 5;  Wait-Process -Name "mintty"
+          Start-Sleep -Seconds 5;
+          Wait-Process -Name "mintty"  -ErrorAction SilentlyContinue -Timeout 600
       - name: Upload Mintty Output log
         uses: actions/upload-artifact@v2
         with:
@@ -42,7 +43,8 @@ jobs:
           echo "running: stack exec -- mintty -e ./.github/ZipBinaries.sh"  
           Start-Sleep -Seconds 5;
           stack exec -- mintty -e ./.github/ZipBinaries.sh
-          Start-Sleep -Seconds 5;  Wait-Process -Name "mintty"
+          Start-Sleep -Seconds 5;
+          Wait-Process -Name "mintty" -ErrorAction SilentlyContinue -Timeout 300
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
