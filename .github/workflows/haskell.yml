@@ -10,9 +10,9 @@ permissions: write-all
 
 jobs:
   build-windows:
-    working-directory : "."
     runs-on: windows-latest
     steps:
+      - working-directory : "."
       - uses: actions/checkout@v3
       - name: Zip dll libraries and exe
         shell: pwsh
