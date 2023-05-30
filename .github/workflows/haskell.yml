@@ -16,7 +16,12 @@ jobs:
       - name: Zip dll libraries and exe
         shell: pwsh
         run: |
-          New-Item -ItemType File -Path "./tmp.zip"
+          $filePath = "tmp.txt"
+          $contents = "This is the content of the file."
+          Set-Content -Path $filePath -Value $contents
+          # Compress the file into a ZIP archive
+          $zipPath = "./tmp.zip"
+          Compress-Archive -Path $filePath -DestinationPath $zipPath
           Get-ChildItem
       - name: Create Release
         id: create_release
