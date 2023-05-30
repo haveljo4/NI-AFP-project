@@ -6,7 +6,6 @@ cabal-version: 1.12
 
 name:           Chess-tool
 version:        0.1.0.0
-
 description:    Please see the README on GitHub at <https://github.com/githubuser/Chess-tool#readme>
 homepage:       https://github.com/haveljo4/Chess-tool#readme
 bug-reports:    https://github.com/haveljo4/Chess-tool/issues
@@ -26,7 +25,13 @@ source-repository head
 
 library
   exposed-modules:
-      Downloader
+      Backend.ChessComDownloadManager
+      Backend.ChessComJsonHelper
+      Backend.Downloader
+      Backend.PGNFileConcatenator
+      Backend.TWICDownloadManager
+      CommandLineView
+      FlkhtsView
       Lib
   other-modules:
       Paths_Chess_tool
@@ -34,8 +39,24 @@ library
       src
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , conduit
+    , conduit-extra
+    , directory
+    , filepath
     , fltkhs
+    , http-types
+    , lens
+    , old-locale
+    , split
+    , stm
+    , text
+    , time
+    , unordered-containers
+    , wreq
+    , zip-conduit
   default-language: Haskell2010
 
 executable Chess-tool-exe
@@ -47,8 +68,24 @@ executable Chess-tool-exe
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -fno-specialise -fmax-simplifier-iterations=0 -fsimplifier-phases=0 -pgml g++ -optl-Wl,--allow-multiple-definition -optl-Wl,--whole-archive -optl-Wl,-Bstatic -optl-Wl,-lfltkc -optl-Wl,-Bdynamic -optl-Wl,--no-whole-archive -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Chess-tool
+    , aeson
     , base >=4.7 && <5
+    , bytestring
+    , conduit
+    , conduit-extra
+    , directory
+    , filepath
     , fltkhs
+    , http-types
+    , lens
+    , old-locale
+    , split
+    , stm
+    , text
+    , time
+    , unordered-containers
+    , wreq
+    , zip-conduit
   default-language: Haskell2010
 
 test-suite Chess-tool-test
@@ -62,7 +99,23 @@ test-suite Chess-tool-test
   build-depends:
       HUnit
     , QuickCheck
+    , aeson
     , base >=4.7 && <5
+    , bytestring
+    , conduit
+    , conduit-extra
+    , directory
+    , filepath
     , fltkhs
     , hspec
+    , http-types
+    , lens
+    , old-locale
+    , split
+    , stm
+    , text
+    , time
+    , unordered-containers
+    , wreq
+    , zip-conduit
   default-language: Haskell2010
