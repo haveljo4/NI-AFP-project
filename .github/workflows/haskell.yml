@@ -13,16 +13,36 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-haskell@v1
+        with:
+          ghc-version: '8.8.2'
+          cabal-version: '3.2'
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          Start-Sleep -Seconds 10
+          stack exec -- mintty -e ./.github/InstallDepsInstallStuff.sh
+          Start-Sleep -Seconds 5;  Wait-Process -Name "mintty"
+      - name: Upload Mintty Output log
+        uses: actions/upload-artifact@v2
+        with:
+          name: mintty-output
+          path: mintty_output.txt
+      - name: Install
+        shell: pwsh
+        run: |
+          stack install --flag fltkhs:bundled
+      - name: Build
+        shell: pwsh
+        run: |
+          stack build
       - name: Zip dll libraries and exe
         shell: pwsh
         run: |
-          $filePath = "tmp.txt"
-          $contents = "This is the content of the file."
-          Set-Content -Path $filePath -Value $contents
-          # Compress the file into a ZIP archive
-          $zipPath = "./tmp.zip"
-          Compress-Archive -Path $filePath -DestinationPath $zipPath
-          Get-ChildItem
+          echo "running: stack exec -- mintty -e ./.github/ZipBinaries.sh"  
+          Start-Sleep -Seconds 5;
+          stack exec -- mintty -e ./.github/ZipBinaries.sh
+          Start-Sleep -Seconds 5;  Wait-Process -Name "mintty"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
