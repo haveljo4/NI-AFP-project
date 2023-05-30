@@ -6,38 +6,68 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
+permissions: write-all
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
+  build-windows:
+    runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-haskell@v1
-      with:
-        ghc-version: '8.10.3'
-        cabal-version: '3.2'
+      - uses: actions/checkout@v3
+      - uses: actions/setup-haskell@v1
+        with:
+          ghc-version: '8.8.2'
+          cabal-version: '3.2'
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          Start-Sleep -Seconds 10
+          stack exec -- mintty -e ./.github/InstallDepsInstallStuff.sh
+          Start-Sleep -Seconds 5;
+          Wait-Process -Name "mintty"  -ErrorAction SilentlyContinue -Timeout 600
+      - name: Upload Mintty Output log
+        uses: actions/upload-artifact@v2
+        with:
+          name: mintty-output
+          path: mintty_output.txt
+      - name: Install
+        shell: pwsh
+        run: |
+          stack install --flag fltkhs:bundled
+      - name: Build
+        shell: pwsh
+        run: |
+          stack build
+      - name: Zip dll libraries and exe
+        shell: pwsh
+        run: |
+          echo "running: stack exec -- mintty -e ./.github/ZipBinaries.sh"  
+          Start-Sleep -Seconds 5;
+          stack exec -- mintty -e ./.github/ZipBinaries.sh
+          Start-Sleep -Seconds 5;
+          Wait-Process -Name "mintty" -ErrorAction SilentlyContinue -Timeout 300
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+      - name: Upload Mintty Output log
+        uses: actions/upload-artifact@v2
+        with:
+          name: mintty-output-2
+          path: mintty_output.txt
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: tmp.zip
+          asset_name: chess_downloader_v${{ github.run_number }}.zip
+          asset_content_type: application/zip
 
-    - name: Cache
-      uses: actions/cache@v3
-      env:
-        cache-name: cache-cabal
-      with:
-        path: ~/.cabal
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.cabal') }}-${{ hashFiles('**/cabal.project') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
-
-    - name: Install dependencies
-      run: |
-        cabal update
-        cabal build --only-dependencies --enable-tests --enable-benchmarks
-    - name: Build
-      run: cabal build --enable-tests --enable-benchmarks all
-    - name: Run tests
-      run: cabal test all
