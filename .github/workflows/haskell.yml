@@ -28,6 +28,11 @@ jobs:
           release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
+      - name: Upload Mintty Output log
+        uses: actions/upload-artifact@v2
+        with:
+          name: tmp.zip
+          path: ./tmp.zip
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
@@ -38,5 +43,4 @@ jobs:
           asset_path: tmp.zip
           asset_name: chess_downloader_v${{ github.run_number }}.zip
           asset_content_type: application/zip
-        run: Get-ChildItem
 
