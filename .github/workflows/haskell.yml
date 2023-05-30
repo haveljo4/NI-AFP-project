@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   build-windows:
+    permissions: {read-all, write-all}
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,8 +25,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
