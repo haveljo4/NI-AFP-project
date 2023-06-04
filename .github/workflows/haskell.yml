@@ -45,12 +45,16 @@ jobs:
           stack exec -- mintty -e ./.github/ZipBinaries.sh
           Start-Sleep -Seconds 5;
           Wait-Process -Name "mintty" -ErrorAction SilentlyContinue -Timeout 300
-      - name: Upload Mintty Output log
+      - name: Test
+        shell: pwsh
+        run: |
+          stack test
+      - name: Upload Executables
         uses: actions/upload-artifact@v2
         with:
           name: chess-tool-exe
           path: chess-tool-exe.zip
-      - name: Upload Executables
+      - name: Upload Mintty Output log
         uses: actions/upload-artifact@v2
         with:
           name: mintty-output-2
