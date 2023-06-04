@@ -48,8 +48,20 @@ jobs:
       - name: Upload Mintty Output log
         uses: actions/upload-artifact@v2
         with:
+          name: chess-tool-exe
+          path: chess-tool-exe.zip
+      - name: Upload Executables
+        uses: actions/upload-artifact@v2
+        with:
           name: mintty-output-2
           path: mintty_output.txt
+  create-release:
+    runs-on: windows-latest
+    steps:
+      - name: Download executables
+      - uses: actions/download-artifact@v2
+        with:
+          name: chess-tool-exe
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
