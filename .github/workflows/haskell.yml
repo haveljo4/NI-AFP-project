@@ -63,6 +63,7 @@ jobs:
           path: mintty_output.txt
   create-release:
     runs-on: windows-latest
+    needs: build-windows
     steps:
       - name: Download executables
         uses: actions/download-artifact@v2
