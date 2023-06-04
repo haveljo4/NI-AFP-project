@@ -5,10 +5,13 @@ import Data.Foldable
 import qualified Data.ByteString.Lazy as B
 import Control.Monad.IO.Class (liftIO)
 import System.FilePath
+import Backend.HTTPHelper as HTTPHelper
+
+
 
 download :: String -> FilePath -> IO ()
 download url fp  =  do
-                   response <- get url
+                   response <- HTTPHelper.getRequest url 
                    -- TODO return warning if couldn't download
                    let lazyResBody =  response ^. responseBody
                    liftIO $ B.writeFile fp lazyResBody
