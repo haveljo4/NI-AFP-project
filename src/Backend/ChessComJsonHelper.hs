@@ -17,10 +17,15 @@ import Data.Aeson (Object, (.:?), withObject)
 import Data.HashMap.Strict (HashMap)
 import Data.Text (Text)
 import Data.Maybe (fromMaybe)
-import Data.List (intercalate)
+import Data.List (intercalate, (\\))
 import qualified Data.Text as T
 import Data.ByteString.Lazy (ByteString)
 import Control.Monad (join)
+import Data.Either (either)
+import Control.Exception (tryJust, evaluate, SomeException)
+import Control.Monad (join)
+
+
 
 -- Define a data type that matches the structure of the JSON
 newtype ChessAPIArchivesResponse
@@ -30,29 +35,38 @@ newtype ChessAPIArchivesResponse
 -- Define instances for parsing the JSON
 instance FromJSON ChessAPIArchivesResponse
 
-filterArchives :: Integer -> Integer -> Integer -> Integer -> String -> [String]
+
+-- Returning valid and invalid urls
+filterArchives :: Integer -> Integer -> Integer -> Integer -> String -> Either String ([String], [String])
 filterArchives yearFrom monthFrom yearTo monthTo inputString =
   case eitherDecode (pack inputString) of
     Left err ->
-      []
+      Left err
     Right response ->
       -- Filter out the archive URLs within the date range
-      let filteredUrls = filter isWithinDateRange (archives response)
-      in filteredUrls
+      let allUrls = (archives response)
+          validUrls = filter validUrlsFilter allUrls
+          filteredValidUrls = filter isWithinDateRange validUrls
+      in Right (filteredValidUrls, allUrls \\ filteredValidUrls )
   where
-    isWithinDateRange :: String -> Bool
-    isWithinDateRange url =
-      let (year, month) = extractYearAndMonthFromURL url
-          date = fromGregorian year (fromInteger month) 1
-          fromDate = fromGregorian yearFrom (fromInteger monthFrom) 1
-          toDate = fromGregorian yearTo (fromInteger monthTo) 1
-      in date >= fromDate && date <= toDate
+    isWithinDateRange :: String ->  Bool
+    isWithinDateRange url = isWithinDateRangeImpl  (extractYearAndMonthFromURL url)
+    isWithinDateRangeImpl :: Either String (Integer, Integer) -> Bool
+    isWithinDateRangeImpl (Right (year, month)) =
+            let date = fromGregorian year (fromInteger month) 1
+                fromDate = fromGregorian yearFrom (fromInteger monthFrom) 1
+                toDate = fromGregorian yearTo (fromInteger monthTo) 1
+            in date >= fromDate && date <= toDate
+    isWithinDateRangeImpl (Left err) = False
 
-extractYearAndMonthFromURL :: String -> (Integer,Integer)
-extractYearAndMonthFromURL  url =
-        let parts = splitOn "/" url
-            year = read (parts !! 7) :: Integer
-            month = read (parts !! 8) :: Integer
-        in (year, month)
+validUrlsFilter :: String -> Bool
+validUrlsFilter url = length  (splitOn "/" url) == 9
+
+extractYearAndMonthFromURL :: String -> Either String (Integer, Integer)
+extractYearAndMonthFromURL url =
+      let parts = splitOn "/" url
+          year = read (parts !! 7)
+          month = read (parts !! 8)
+      in Right (year, month)
 
 

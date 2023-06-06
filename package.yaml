@@ -107,4 +107,5 @@ tests:
     - HUnit
     - hspec
     - QuickCheck
+    - Chess-tool
 

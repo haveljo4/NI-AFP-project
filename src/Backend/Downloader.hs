@@ -7,8 +7,6 @@ import Control.Monad.IO.Class (liftIO)
 import System.FilePath
 import Backend.HTTPHelper as HTTPHelper
 
-
-
 download :: String -> FilePath -> IO ()
 download url fp  =  do
                    response <- HTTPHelper.getRequest url 
