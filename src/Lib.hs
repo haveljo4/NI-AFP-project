@@ -102,7 +102,7 @@ uiChessComDownload = do
                   (Just "ChessCom Downloader")
   userNameInput <- inputNew
                      (toRectangle (100, 110, 120, 25))
-                     (Just "User name #:")
+                     (Just "User name :")
                      (Just FlNormalInput)
   setMaximumSize userNameInput 255
 
