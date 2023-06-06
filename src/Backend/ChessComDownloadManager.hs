@@ -10,7 +10,6 @@ import qualified Backend.Downloader as Downloader
 import qualified Backend.PGNFileConcatenator as PGNFileConcatenator 
 import Backend.ChessComJsonHelper as ChessComJsonHelper
 import Backend.HTTPHelper as HTTPHelper
-import Backend.CommonHelper (performTaskWithTimeout)
 import Network.Wreq
 import Control.Lens
 import Data.Foldable
