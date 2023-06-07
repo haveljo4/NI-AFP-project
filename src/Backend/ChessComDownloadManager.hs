@@ -20,6 +20,7 @@ import System.FilePath
 import Data.List (intercalate, (\\))
 import Data.Char (isAscii, isAlphaNum)
 
+-- | Downloads chess game archives from Chess.com and groups them based on filters.
 downloadAndGroup :: Integer -> Integer -> Integer -> Integer -> String -> FilePath -> (String -> String -> IO ()) -> IO ()
 downloadAndGroup yearFrom monthFrom yearTo monthTo userName outputFolder logFunction = do
   let tmpFolderPath = outputFolder </> "chess-tool-chesscom-tmp"
@@ -39,6 +40,7 @@ downloadAndGroup yearFrom monthFrom yearTo monthTo userName outputFolder logFunc
       createDirectoryIfMissing True outputFolder
       createDirectoryIfMissing True tmpFolderPath
 
+-- Iterates archives, filters out non matching URLs  
 processedFilteredArchives :: Either String ([String], [String]) ->  FilePath -> String-> (String -> String -> IO ()) -> FilePath -> FilePath ->  IO ()
 processedFilteredArchives (Left err) tmpFolderPath userName logFunction outputFolder outputFileName = logFunction  ("Unable filter archives due to: "++show err) "ERROR"
 processedFilteredArchives (Right (validUrls, invalidUrls)) tmpFolderPath userName logFunction outputFolder outputFileName = do
@@ -54,7 +56,7 @@ processFilterResult filteredArchivesURLs tmpFolderPath userName logFunction outp
     mapM_ (processUrl tmpFolderPath userName logFunction) filteredArchivesURLs
     logFunction ("Joining pgns into single file: " <> (outputFolder </> outputFileName)) "INFO"
     PGNFileConcatenator.processFolderWithPGNs tmpFolderPath (outputFolder </> outputFileName)
-    logFunction ("Joined successfully, file: " <> (outputFolder </> outputFileName)) "INFO"
+    logFunction ("Successfully joined file: " <> (outputFolder </> outputFileName)) "INFO"
     logFunction ("Removing tmp folder: " <> tmpFolderPath)  "INFO"
     removeDirectoryRecursive tmpFolderPath
   where
@@ -69,7 +71,7 @@ processFilterResult filteredArchivesURLs tmpFolderPath userName logFunction outp
       logFunction ("Downloading: " <> fileName) "INFO"
       Downloader.download (url ++ "/pgn") filePath
     processExtractedYearAndMonth tmpFolderPath userName logFunction url  (Left err) = do
-      logFunction ("Error when parsing url: " <> url <> " due to: " <> err ) "ERROR"
+      logFunction ("Error when parsing URL: " <> url <> " due to: " <> err ) "ERROR"
 
 
 sanitizeUsername :: String -> String

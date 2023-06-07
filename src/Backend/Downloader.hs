@@ -14,4 +14,4 @@ download url fp  =  do
                    let lazyResBody =  response ^. responseBody
                    liftIO $ B.writeFile fp lazyResBody
 
--- TODO implement estimator of size of the downloaded file. 
+-- TODO implement estimator of size of the downloaded files. 

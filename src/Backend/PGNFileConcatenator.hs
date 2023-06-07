@@ -5,10 +5,12 @@ import Data.List (isSuffixOf)
 import Conduit
 import qualified Data.ByteString as BS
 
+--Just appends the file content to the end of the first file 
 concatenateFiles :: [FilePath] -> FilePath -> IO ()
 concatenateFiles inputFiles outputFile = runConduitRes $
   mapM_ sourceFileBS inputFiles .| sinkFileBS outputFile
 
+-- Takes only files which matches the extension
 filterFilesByExtension :: String -> [FilePath] -> [FilePath]
 filterFilesByExtension extension = filter (isSuffixOf extension)
 

@@ -31,9 +31,11 @@ library
       Backend.HTTPHelper
       Backend.PGNFileConcatenator
       Backend.TWICDownloadManager
-      CommandLineView
-      FlkhtsView
-      Lib
+      Frontend.CommandLine.MainWindow
+      Frontend.Flkhts.ChessComWindow
+      Frontend.Flkhts.CommonHelper
+      Frontend.Flkhts.MainView
+      Frontend.Flkhts.TWICWindow
   other-modules:
       Paths_Chess_tool
   hs-source-dirs:
