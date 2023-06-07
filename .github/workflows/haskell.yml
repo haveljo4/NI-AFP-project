@@ -12,8 +12,10 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-haskell@v1
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Haskell
+        uses: actions/setup-haskell@v1
         with:
           ghc-version: '8.8.2'
           cabal-version: '3.2'
@@ -22,7 +24,7 @@ jobs:
         run: |
           Start-Sleep -Seconds 10
           stack exec -- mintty -e ./.github/InstallDepsInstallStuff.sh
-          Start-Sleep -Seconds 5;
+          Start-Sleep -Seconds 5
           Wait-Process -Name "mintty"  -ErrorAction SilentlyContinue -Timeout 600
       - name: Upload Mintty Output log
         uses: actions/upload-artifact@v2
@@ -41,15 +43,32 @@ jobs:
         shell: pwsh
         run: |
           echo "running: stack exec -- mintty -e ./.github/ZipBinaries.sh"  
-          Start-Sleep -Seconds 5;
+          Start-Sleep -Seconds 5
           stack exec -- mintty -e ./.github/ZipBinaries.sh
-          Start-Sleep -Seconds 5;
+          Start-Sleep -Seconds 5
           Wait-Process -Name "mintty" -ErrorAction SilentlyContinue -Timeout 300
+      - name: Test
+        shell: pwsh
+        run: |
+          stack test
+      - name: Upload Executables
+        uses: actions/upload-artifact@v2
+        with:
+          name: chess-tool-exe
+          path: chess-tool-exe.zip
       - name: Upload Mintty Output log
         uses: actions/upload-artifact@v2
         with:
           name: mintty-output-2
           path: mintty_output.txt
+  create-release:
+    runs-on: windows-latest
+    needs: build-windows
+    steps:
+      - name: Download executables
+        uses: actions/download-artifact@v2
+        with:
+          name: chess-tool-exe
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -66,8 +85,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: chess-tool-exe.zip
           asset_name: chess-downloader-v${{ github.run_number }}.zip
           asset_content_type: application/zip
-
