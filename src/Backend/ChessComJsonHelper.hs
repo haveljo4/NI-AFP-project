@@ -47,7 +47,7 @@ filterArchives yearFrom monthFrom yearTo monthTo inputString =
       let allUrls = (archives response)
           validUrls = filter validUrlsFilter allUrls
           filteredValidUrls = filter isWithinDateRange validUrls
-      in Right (filteredValidUrls, allUrls \\ filteredValidUrls )
+      in Right (filteredValidUrls, allUrls \\ validUrls )
   where
     isWithinDateRange :: String ->  Bool
     isWithinDateRange url = isWithinDateRangeImpl  (extractYearAndMonthFromURL url)

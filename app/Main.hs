@@ -1,11 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
-import qualified Lib
-import qualified CommandLineView
+import qualified Frontend.Flkhts.MainView as FlkhtsView
 
 main :: IO ()
-main = Lib.main
+main = FlkhtsView.main
 --main = CommandLineView.main
 
 replMain :: IO ()
-replMain = Lib.replMain
+replMain = FlkhtsView.replMain
