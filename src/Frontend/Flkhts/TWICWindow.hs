@@ -32,6 +32,7 @@ uiTwicDownload = do
              Nothing
              (Just "TWIC Download Window")
   begin window
+  Helper.setIconToWindow window
 
   -- Create the box with name of the window
   imageBox  <- boxNew
@@ -42,6 +43,10 @@ uiTwicDownload = do
   imageBox  <- boxNew
                   (toRectangle (10, 10, 600, 50))
                   (Just "TWIC Downloader")
+-- Create the image box
+  infoBox  <- boxNew
+                  (toRectangle (10, 40, 600, 50))
+                  (Just "Download games from https://theweekinchess.com/ website.")
 
   -- Create the input fields for index from and index to
   indexFromInput <- inputNew
