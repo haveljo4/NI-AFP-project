@@ -32,11 +32,16 @@ uiChessComDownload = do
              Nothing
              (Just "ChessCom Download Window")
   begin window
+  Helper.setIconToWindow window
 
   -- Create the image box
   imageBox  <- boxNew
                   (toRectangle (10, 10, 600, 50))
                   (Just "ChessCom Downloader")
+                                    
+  imageBox  <- boxNew
+                  (toRectangle (10, 40, 600, 50))
+                  (Just "Download games from https://www.chess.com/ website.")
 
   -- Create the user name input field
   userNameInput <- inputNew

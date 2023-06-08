@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Frontend.Flkhts.CommonHelper where
+module Frontend.Flkhts.CommonHelper  where
 import qualified Graphics.UI.FLTK.LowLevel.FL as FL
 import Graphics.UI.FLTK.LowLevel.Fl_Types
 import Graphics.UI.FLTK.LowLevel.FLTKHS
@@ -70,3 +70,11 @@ ioTextToString :: T.Text -> IO String
 ioTextToString ioText = do
   let text = T.unpack ioText
   return text
+
+setIconToWindow :: (Ref Window) ->  IO ()
+setIconToWindow window = do
+  icon <- pngImageNew  "icon.png"
+  case icon of
+    (Right image) -> do
+      setIcon window (Just image)
+    Left _ -> putStrLn "Couldn't read the image"
