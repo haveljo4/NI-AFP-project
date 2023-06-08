@@ -10,19 +10,7 @@ import qualified Backend.ChessComDownloadManager as ChessComDownloadManager
 import qualified Frontend.Flkhts.TWICWindow as TWICWin
 import qualified Frontend.Flkhts.ChessComWindow as ChessComWin
 import qualified Frontend.Flkhts.CommonHelper as Helper
-import Text.Read (readMaybe)
 import System.FilePath ((</>))
-import Control.Concurrent
-import Control.Concurrent.STM
-import Control.Exception (evaluate)
-import Data.Time.Clock
-import Data.Time.Format
-import System.Locale hiding (defaultTimeLocale)
-import Control.Concurrent
-import Control.Concurrent.STM
-import Control.Exception (evaluate)
-import Control.Monad
-import Data.IORef
 
 -- | Start the UI.
 uiStart :: IO ()

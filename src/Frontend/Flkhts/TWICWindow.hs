@@ -10,8 +10,6 @@ import qualified Backend.ChessComDownloadManager as ChessComDownloadManager
 import qualified Frontend.Flkhts.CommonHelper as Helper
 import Text.Read (readMaybe)
 import System.FilePath ((</>))
-import Control.Concurrent
-import Control.Concurrent.STM
 import Control.Exception (evaluate)
 import Data.Time.Clock
 import Data.Time.Format
