@@ -1,4 +1,7 @@
-# Chess Data Tool
+# Chess.com and TWIC games downloader
+
+**Download**
+The latest release can found here: https://github.com/haveljo4/chess-games-download/releases/latest
 
 **Description**
 
@@ -19,14 +22,11 @@ The tool is designed to be user-friendly and accessible to individuals without a
 - Download chess games from chess.com for a specified player and create a .pgn database.
 - Download chess game files from The Week in Chess website and compile them into a single .pgn database.
 - Interactive graphical user interface (GUI).
-- Progress indicators during the download process.
-- Error handling for invalid inputs and network connectivity issues.
 
 **Requirements for build**
 
-
 ***Windows***
-
+The whole building process can be also found in the github action workflow under the .github directory. 
 
 It is important to install msys2 https://www.msys2.org/.
 Then install autoconf with version 2.69
