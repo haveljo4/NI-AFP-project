@@ -22,9 +22,9 @@ jobs:
           ghc-version: '8.8.3'
           enable-stack: 'true'
           stack-version: 'latest'
-        if: always()
       - name: Install dependencies
         shell: pwsh
+        if: always()
         run: |
           Start-Sleep -Seconds 10
           stack exec -- mintty -e ./.github/InstallDepsInstallStuff.sh
