@@ -9,7 +9,7 @@ on:
 permissions: write-all
 
 jobs:
-  build-windows:
+  build-and-test-windows:
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -63,7 +63,7 @@ jobs:
           path: mintty_output.txt
   create-release:
     runs-on: windows-latest
-    needs: build-windows
+    needs: build-and-test-windows
     steps:
       - name: Download executables
         uses: actions/download-artifact@v2
