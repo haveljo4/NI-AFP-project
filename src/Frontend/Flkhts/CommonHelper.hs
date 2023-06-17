@@ -20,6 +20,9 @@ import Control.Concurrent.STM
 import Control.Exception (evaluate)
 import Control.Monad
 import Data.IORef
+import System.Environment (getExecutablePath)
+import System.FilePath (takeDirectory)
+
 
 -- | Perform a tick operation on the text buffer and the text channel.
 tick :: Ref TextBuffer -> TChan T.Text -> IO ()
@@ -78,3 +81,9 @@ setIconToWindow window = do
     (Right image) -> do
       setIcon window (Just image)
     Left _ -> putStrLn "Couldn't read the image"
+ 
+getCurrentFolder :: IO FilePath
+getCurrentFolder = do 
+    executablePath <- getExecutablePath
+    return (takeDirectory executablePath)
+
