@@ -8,11 +8,13 @@ import Conduit
 import qualified Data.Conduit.Combinators as CC
 import qualified Backend.Downloader as Downloader
 import qualified Backend.PGNFileConcatenator as PGNFileConcatenator
+import qualified Backend.CommonHelper as CommonHelper
 
 -- Download and group chess game archives from The Week in Chess (TWIC)
 downloadAndGroup :: Integer -> Integer -> FilePath -> (String -> String -> IO ()) -> IO ()
 downloadAndGroup iFrom iTo outputFolder logFunction = do
-    let tmpFolderPath = outputFolder </> "chess-tool-twic-tmp"
+    tmpFolderName <- (CommonHelper.getTmpFolderName "chess-tool-twic-tmp")
+    let tmpFolderPath = outputFolder </> tmpFolderName
     logFunction ("Creating output directory: " <> outputFolder) "INFO"
     createDirectoryIfMissing True outputFolder
     logFunction ("Creating directory: " <> tmpFolderPath) "INFO"
