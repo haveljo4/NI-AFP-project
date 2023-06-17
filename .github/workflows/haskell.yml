@@ -12,10 +12,8 @@ jobs:
   build-and-test-windows:
     runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Setup Haskell
-        uses: actions/setup-haskell@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-haskell@v1
         with:
           ghc-version: '8.8.2'
           cabal-version: '3.2'
