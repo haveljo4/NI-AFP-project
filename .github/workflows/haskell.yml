@@ -14,17 +14,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Setup Haskell
-        uses: actions/setup-haskell@v1.1
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-        with:
-          ghc-version: '8.8.3'
-          enable-stack: 'true'
-          stack-version: 'latest'
       - name: Install dependencies
         shell: pwsh
-        if: always()
         run: |
           Start-Sleep -Seconds 10
           stack exec -- mintty -e ./.github/InstallDepsInstallStuff.sh
