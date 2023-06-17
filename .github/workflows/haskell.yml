@@ -10,10 +10,12 @@ permissions: write-all
 
 jobs:
   build-and-test-windows:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-haskell@v1
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Haskell
+        uses: actions/setup-haskell@v1
         with:
           ghc-version: '8.8.2'
           cabal-version: '3.2'
@@ -60,7 +62,7 @@ jobs:
           name: mintty-output-2
           path: mintty_output.txt
   create-release:
-    runs-on: windows-2019
+    runs-on: windows-latest
     needs: build-and-test-windows
     steps:
       - name: Download executables
