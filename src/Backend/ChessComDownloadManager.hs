@@ -19,12 +19,16 @@ import Control.Monad.IO.Class (liftIO)
 import System.FilePath
 import Data.List (intercalate, (\\))
 import Data.Char (isAscii, isAlphaNum)
+import qualified Backend.CommonHelper as CommonHelper
+
 
 -- | Downloads chess game archives from Chess.com and groups them based on filters.
 downloadAndGroup :: Integer -> Integer -> Integer -> Integer -> String -> FilePath -> (String -> String -> IO ()) -> IO ()
 downloadAndGroup yearFrom monthFrom yearTo monthTo userName outputFolder logFunction = do
-  let tmpFolderPath = outputFolder </> "chess-tool-chesscom-tmp"
-  logFunction ("Creating output directories: " <> outputFolder <> " and " <> tmpFolderPath) "INFO"
+  tmpFolderName <- (CommonHelper.getTmpFolderName "chess-tool-chesscom-tmp")
+  let tmpFolderPath = outputFolder </> tmpFolderName
+  logFunction ("Creating output directory: " <> outputFolder) "INFO"
+  logFunction ("Creating temporal directory: "  <> tmpFolderPath) "INFO"
   createTmpFolders outputFolder tmpFolderPath
   let url = "https://api.chess.com/pub/player/" ++ userName ++ "/games/archives"
   logFunction ("Sending GET request on url: " <> url <> " to receive available archives") "INFO"

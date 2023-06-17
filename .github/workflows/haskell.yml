@@ -9,16 +9,11 @@ on:
 permissions: write-all
 
 jobs:
-  build-windows:
+  build-and-test-windows:
     runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Setup Haskell
-        uses: actions/setup-haskell@v1
-        with:
-          ghc-version: '8.8.2'
-          cabal-version: '3.2'
       - name: Install dependencies
         shell: pwsh
         run: |
@@ -63,7 +58,7 @@ jobs:
           path: mintty_output.txt
   create-release:
     runs-on: windows-latest
-    needs: build-windows
+    needs: build-and-test-windows
     steps:
       - name: Download executables
         uses: actions/download-artifact@v2

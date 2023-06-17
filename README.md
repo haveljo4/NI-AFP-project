@@ -15,7 +15,7 @@ Chess.com and The Week in Chess (TWIC) are widely recognized as the most frequen
 The Chess Data Tool simplifies the process of gathering and organizing chess game data for further analysis or study. Practical players recognize the importance of studying their opponent's games before a match, as it allows them to prepare strategically and be better equipped for the upcoming game. By analyzing their opponent's playing style, strengths, and weaknesses, players can devise effective strategies and make informed decisions during the game. This thorough preparation increases their chances of success and enables them to approach the match with confidence.
 
 
-The tool is designed to be user-friendly and accessible to individuals without any programming knowledge.
+The tool is designed to be user-friendly and accessible to individuals without any programming knowledge. 
 
 **Features**
 
