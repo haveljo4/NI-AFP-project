@@ -10,7 +10,7 @@ permissions: write-all
 
 jobs:
   build-and-test-windows:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-haskell@v1
@@ -60,7 +60,7 @@ jobs:
           name: mintty-output-2
           path: mintty_output.txt
   create-release:
-    runs-on: windows-latest
+    runs-on: windows-2019
     needs: build-and-test-windows
     steps:
       - name: Download executables
