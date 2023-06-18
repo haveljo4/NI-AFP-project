@@ -56,6 +56,13 @@ jobs:
         with:
           name: mintty-output-2
           path: mintty_output.txt
+      - name: Generate PDF documentation
+        uses: docker://pandoc/core:2.9
+        with:
+          args: >-  # allows you to break string into multiple lines
+            --standalone
+            --output=README.pdf
+            README.md
   create-release:
     runs-on: windows-latest
     needs: build-and-test-windows
