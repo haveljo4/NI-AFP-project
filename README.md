@@ -8,7 +8,7 @@ Stable release: https://github.com/haveljo4/chess-games-download/releases/tag/12
 **Usage** 
 Tutorial can be found in the https://github.com/haveljo4/chess-games-download/blob/main/doc/Tutorial.pdf
 
-The tutorial is for the release 120
+The tutorial is for the release 122
 
 **Description**
 
