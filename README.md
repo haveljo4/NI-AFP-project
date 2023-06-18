@@ -1,7 +1,12 @@
 # Chess.com and TWIC games downloader
 
 **Download**
-The latest release can found here: https://github.com/haveljo4/chess-games-download/releases/latest
+Latest release: https://github.com/haveljo4/chess-games-download/releases/latest
+Stable release: https://github.com/haveljo4/chess-games-download/releases/tag/118
+
+**Usage** 
+Tutorial can be found in the https://github.com/haveljo4/chess-games-download/blob/main/doc/Tutorial.pdf
+The tutorial is for the release 
 
 **Description**
 
