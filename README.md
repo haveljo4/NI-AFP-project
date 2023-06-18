@@ -19,7 +19,7 @@ The tool is designed to be user-friendly and accessible to individuals without a
 
 **Features**
 
-- Download chess games from chess.com for a specified player and create a .pgn database.
+- Download chess games from chess.com for a specified player and create and compile them into a single .pgn database.
 - Download chess game files from The Week in Chess website and compile them into a single .pgn database.
 - Interactive graphical user interface (GUI).
 
