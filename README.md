@@ -3,7 +3,7 @@
 **Download**
 Latest release: https://github.com/haveljo4/chess-games-download/releases/latest
 
-Stable release: https://github.com/haveljo4/chess-games-download/releases/tag/120
+Stable release: https://github.com/haveljo4/chess-games-download/releases/tag/122
 
 **Usage** 
 Tutorial can be found in the https://github.com/haveljo4/chess-games-download/blob/main/doc/Tutorial.pdf
